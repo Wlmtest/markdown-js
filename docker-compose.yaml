@@ -1,0 +1,25 @@
+version: '2'
+services:
+    node-server:
+        image: daocloud.io/node
+        volumes:
+            - .:/test
+        extra_hosts:
+            - "server.oneooone.com:121.40.30.1"
+            - "3dsystem.oneooone.com:121.40.30.1"
+        ports:
+            - "3000:3000" #路由端口
+            - "8179:8179" #报告端口
+        networks:
+            - default
+        links:
+            - "db:database"
+        command: bash -c "cd test && npm start"
+    db:
+        image: daocloud.io/mongo
+        environment:
+            - MONGODB_USER=wlm
+            - MONGODB_DATABASE=mongodb
+            - MONGODB_PASS=12345
+        networks:
+            - default

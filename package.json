@@ -1,0 +1,33 @@
+{
+  "name": "node-server",
+  "version": "1.0.0",
+  "description": "study for node server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --harmony server.js",
+    "pm2": "pm2 start ecosystem.config.js ",
+    "eslint": "./node_modules/.bin/eslint . ;exit 0"
+  },
+  "author": "wlm",
+  "license": "ISC",
+  "dependencies": {
+    "boom": "^4.2.0",
+    "d3": "^4.5.0",
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.2.0",
+    "koa-router": "^7.0.1",
+    "koa-views": "^5.2.0",
+    "mongodb": "^2.2.19",
+    "nodemon": "^1.11.0",
+    "nunjucks": "^3.0.0",
+    "showdown": "^1.6.4",
+    "vue": "^2.1.10"
+  },
+  "devDependencies": {
+    "eslint": "^3.13.0",
+    "pm2": "^2.2.3",
+    "should": "^11.2.0",
+    "supertest": "^3.0.0"
+  }
+}
