@@ -1,0 +1,409 @@
+<p data-line="0" class="code-line"><img src="https://raw.githubusercontent.com/showdownjs/logo/master/dist/logo.readme.png" alt="Showdown"></p>
+<p data-line="2" class="code-line">Showdown is a Javascript Markdown to HTML converter, based on the original works by John Gruber. It can be used client side (in the browser) or server side (with Node or io).</p>
+<h1 data-line="5" class="code-line" id="installation">Installation</h1>
+<h2 data-line="7" class="code-line" id="download-tarball">Download tarball</h2>
+<p data-line="9" class="code-line">You can download the latest release tarball directly from <a href="https://github.com/showdownjs/showdown/releases">releases</a></p>
+<h2 data-line="11" class="code-line" id="bower">Bower</h2>
+<pre data-line="13" class="code-line"><code>bower install showdown
+</code></pre>
+<h2 data-line="15" class="code-line" id="npm-server-side">npm (server-side)</h2>
+<pre data-line="17" class="code-line"><code>npm install showdown
+</code></pre>
+<h2 data-line="19" class="code-line" id="cdn">CDN</h2>
+<p data-line="21" class="code-line">You can also use one of several CDNs available:</p>
+<ul>
+<li data-line="23" class="code-line">
+<p>rawgit CDN</p>
+<pre><code>  https://cdn.rawgit.com/showdownjs/showdown/&lt;version tag&gt;/dist/showdown.min.js
+</code></pre>
+</li>
+<li data-line="27" class="code-line">
+<p>cdnjs</p>
+<pre><code>  https://cdnjs.cloudflare.com/ajax/libs/showdown/&lt;version tag&gt;/showdown.min.js
+</code></pre>
+</li>
+</ul>
+<hr>
+<h1 data-line="39" class="code-line" id="syntax">Syntax</h1>
+<h2 data-line="42" class="code-line" id="introduction">Introduction</h2>
+<p data-line="44" class="code-line">Showdown was created by John Fraser as a direct port of the original parser written by markdown's creator, John Gruber. Although Showdown has evolved since its inception, in &quot;vanilla mode&quot;, it tries to follow the <a href="http://daringfireball.net/projects/markdown/">original markdown spec</a> (henceforth refereed as vanilla) as much as possible. There are, however, a few important differences, mainly due to inconsistencies in the original spec, which we addressed following the author's advice as stated in the <a href="https://pairlist6.pair.net/mailman/listinfo/markdown-discuss">markdown's &quot;official&quot; newsletter</a>.</p>
+<p data-line="46" class="code-line">Showdown also support &quot;extra&quot; syntax not defined in the original spec as opt-in features. This means new syntax elements are not enabled by default and require users to enable them through options.</p>
+<p data-line="48" class="code-line">This document provides a quick description the syntax supported and the differences in output from the original markdown.pl implementation.</p>
+<h2 data-line="50" class="code-line" id="paragraphs">Paragraphs</h2>
+<p data-line="52" class="code-line">Paragraphs in Showdown are just <strong>one or more lines of consecutive text</strong> followed by one or more blank lines.</p>
+<pre class="hljs"><code><div>On July 2, an alien mothership entered Earth's orbit and deployed several dozen 
+saucer-shaped "destroyer" spacecraft, each 15 miles (24 km) wide.
+<span class="hljs-code">    </span>
+On July 3, the Black Knights, a squadron of Marine Corps F/A-18 Hornets, 
+participated in an assault on a destroyer near the city of Los Angeles.
+</div></code></pre>
+<p data-line="62" class="code-line">The implication of the “one or more consecutive lines of text” is that Showdown supports
+“hard-wrapped” text paragraphs. This means the following examples produce the same output:</p>
+<pre class="hljs"><code><div>A very long line of text
+</div></code></pre>
+<pre class="hljs"><code><div>A very
+long line
+of text
+</div></code></pre>
+<p data-line="75" class="code-line">If you DO want to add soft line breaks (which translate to <code>&lt;br&gt;</code> in HTML) to a paragraph,
+you can do so by adding 3 space characters to the end of the line (<code></code>).</p>
+<p data-line="78" class="code-line">You can also force every line break in paragraphs to translate to <code>&lt;br&gt;</code> (as Github does) by
+enabling the option <strong><code>simpleLineBreaks</code></strong>.</p>
+<h2 data-line="81" class="code-line" id="headings">Headings</h2>
+<h3 data-line="83" class="code-line" id="atx-style">Atx Style</h3>
+<p data-line="85" class="code-line">You can create a heading by adding one or more # symbols before your heading text. The number of # you use will determine the size of the heading. This is similar to <a href="http://www.aaronsw.com/2002/atx/intro"><strong>atx style</strong></a>.</p>
+<pre class="hljs"><code><div><span class="hljs-section"># The largest heading (an &lt;h1&gt; tag)</span>
+<span class="hljs-section">## The second largest heading (an &lt;h2&gt; tag)</span>
+…
+<span class="hljs-section">###### The 6th largest heading (an &lt;h6&gt; tag)</span>
+</div></code></pre>
+<p data-line="94" class="code-line">The space between <code>#</code> and the heading text is not required but you can make that space mandatory by enabling the option <strong><code>requireSpaceBeforeHeadingText</code></strong>.</p>
+<p data-line="96" class="code-line">You can wrap the headings in <code>#</code>. Both leading and trailing <code>#</code> will be removed.</p>
+<pre class="hljs"><code><div><span class="hljs-section">## My Heading ##</span>
+</div></code></pre>
+<p data-line="102" class="code-line">If, for some reason, you need to keep a leading or trailing <code>#</code>, you can either add a space or escape it:</p>
+<pre class="hljs"><code><div><span class="hljs-section"># # My header # #</span>
+
+<span class="hljs-section">#\# My Header \# #</span>
+</div></code></pre>
+<h3 data-line="110" class="code-line" id="setext-style">Setext style</h3>
+<p data-line="112" class="code-line">You can also use <a href="https://en.wikipedia.org/wiki/Setext"><strong>setext style</strong></a> headings, although only two levels are available.</p>
+<pre class="hljs"><code><div><span class="hljs-section">This is an H1
+=============</span>
+<span class="hljs-code">    </span>
+<span class="hljs-section">This is an H2
+-------------</span>
+</div></code></pre>
+<p data-line="122" class="code-line"><strong>Note:</strong><br>
+In live preview editors, when a paragraph is followed by a list it can cause an awkward effect.</p>
+<p data-line="125" class="code-line"><img src="http://i.imgur.com/YQ9iHTL.gif" alt="awkward effect"></p>
+<p data-line="127" class="code-line">You can prevent this by enabling the option <strong><code>smoothPreview</code></strong>.</p>
+<h3 data-line="129" class="code-line" id="header-ids">Header IDs</h3>
+<p data-line="131" class="code-line">Showdown generates bookmarks anchors in titles automatically, by adding an id property to an heading.</p>
+<pre class="hljs"><code><div><span class="hljs-section"># My cool header with ID</span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"mycoolheaderwithid"</span>&gt;</span>My cool header with ID<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+</div></code></pre>
+<p data-line="141" class="code-line">This behavior can be modified with options:</p>
+<ul>
+<li data-line="143" class="code-line"><strong><code>noHeaderId</code></strong> disables automatic id generation;</li>
+<li data-line="144" class="code-line"><strong><code>ghCompatibleHeaderId</code></strong> generates header ids compatible with github style (spaces are replaced with dashes and a bunch of non alphanumeric chars are removed)</li>
+<li data-line="145" class="code-line"><strong><code>prefixHeaderId</code></strong> adds a prefix to the generated header ids (either automatic or custom).</li>
+<li data-line="146" class="code-line"><strong><code>headerLevelStart</code></strong> sets the header starting level. For instance, setting this to 3 means that <code># header</code> will be converted to <code>&lt;h3&gt;</code>.</li>
+</ul>
+<p data-line="148" class="code-line">Read the <a href="https://github.com/showdownjs/showdown/blob/master/README.md">README.md</a> for more info</p>
+<h2 data-line="150" class="code-line" id="blockquotes">Blockquotes</h2>
+<p data-line="152" class="code-line">You can indicate blockquotes with a &gt;.</p>
+<pre class="hljs"><code><div>In the words of Abraham Lincoln:
+<span class="hljs-code">    </span>
+<span class="hljs-quote">&gt; Pardon my french</span>
+</div></code></pre>
+<p data-line="160" class="code-line">Blockquotes can have multiple paragraphs and can have other block elements inside.</p>
+<pre class="hljs"><code><div><span class="hljs-quote">&gt; A paragraph of text</span>
+<span class="hljs-quote">&gt;
+&gt; Another paragraph</span>
+<span class="hljs-quote">&gt;
+&gt; - A list</span>
+<span class="hljs-quote">&gt; - with items</span>
+</div></code></pre>
+<h2 data-line="171" class="code-line" id="bold-and-italic">Bold and Italic</h2>
+<p data-line="173" class="code-line">You can make text bold or italic.</p>
+<pre data-line="175" class="code-line"><code>*This text will be italic*
+**This text will be bold**
+</code></pre>
+<p data-line="178" class="code-line">Both bold and italic can use either a * or an _ around the text for styling. This allows you to combine both bold and italic if needed.</p>
+<pre data-line="180" class="code-line"><code>**Everyone _must_ attend the meeting at 5 o'clock today.**
+</code></pre>
+<h2 data-line="182" class="code-line" id="strikethrough">Strikethrough</h2>
+<p data-line="184" class="code-line">With the option <strong><code>strikethrough</code></strong> enabled, Showdown supports strikethrough elements.
+The syntax is the same as GFM, that is, by adding two tilde (<code>~~</code>) characters around
+a word or groups of words.</p>
+<pre class="hljs"><code><div>a ~~strikethrough~~ element
+</div></code></pre>
+<p data-line="192" class="code-line">a <s>strikethrough</s> element</p>
+<h2 data-line="194" class="code-line" id="code-formatting">Code formatting</h2>
+<h3 data-line="196" class="code-line" id="inline-formats">Inline formats</h3>
+<p data-line="198" class="code-line">Use single backticks (`) to format text in a special monospace format. Everything within the backticks appear as-is, with no other special formatting.</p>
+<pre class="hljs"><code><div>Here's an idea: why don't we take <span class="hljs-code">`SuperiorProject`</span> and turn it into <span class="hljs-code">`**Reasonable**Project`</span>.
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Here's an idea: why don't we take <span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>SuperiorProject<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span> and turn it into <span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>**Reasonable**Project<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span>.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</div></code></pre>
+<h3 data-line="208" class="code-line" id="multiple-lines">Multiple lines</h3>
+<p data-line="210" class="code-line">To create blocks of code you should indent it by four spaces.</p>
+<pre class="hljs"><code><div>    this is a piece
+    of
+    code
+</div></code></pre>
+<p data-line="218" class="code-line">If the options <strong><code>ghCodeBlocks</code></strong> is activated (which is by default), you can use triple backticks (```) to format text as its own distinct block.</p>
+<pre data-line="220" class="code-line"><code>Check out this neat program I wrote:
+
+```
+x = 0
+x = 2 + 2
+what is x
+```
+</code></pre>
+<h2 data-line="228" class="code-line" id="lists">Lists</h2>
+<p data-line="230" class="code-line">Showdown supports ordered (numbered) and unordered (bulleted) lists.</p>
+<h3 data-line="232" class="code-line" id="unordered-lists">Unordered lists</h3>
+<p data-line="234" class="code-line">You can make an unordered list by preceding list items with either a *, a - or a +. Markers are interchangeable too.</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">* </span>Item
+<span class="hljs-bullet">+ </span>Item
+<span class="hljs-bullet">- </span>Item
+</div></code></pre>
+<h3 data-line="242" class="code-line" id="ordered-lists">Ordered lists</h3>
+<p data-line="244" class="code-line">You can make an ordered list by preceding list items with a number.</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">1. </span>Item 1
+<span class="hljs-bullet">2. </span>Item 2
+<span class="hljs-bullet">3. </span>Item 3
+</div></code></pre>
+<p data-line="252" class="code-line">It’s important to note that the actual numbers you use to mark the list have no effect on the HTML output Showdown produces. So you can use the same number in all items if you wish to.</p>
+<h3 data-line="254" class="code-line" id="tasklists-gfm-style">TaskLists (GFM Style)</h3>
+<p data-line="256" class="code-line">Showdown also supports GFM styled takslists if the <strong><code>tasklists</code></strong> option is enabled.</p>
+<pre class="hljs"><code><div> - [x] checked list item
+ - [ ] unchecked list item
+</div></code></pre>
+<ul>
+<li data-line="263" class="code-line">[x] checked list item</li>
+<li data-line="264" class="code-line">[ ] unchecked list item</li>
+</ul>
+<h3 data-line="266" class="code-line" id="list-syntax">List syntax</h3>
+<p data-line="268" class="code-line">List markers typically start at the left margin, but may be indented by up to three spaces.</p>
+<pre class="hljs"><code><div>   * this is valid
+   * this is too  
+</div></code></pre>
+<p data-line="275" class="code-line">List markers must be followed by one or more spaces or a tab.</p>
+<p data-line="277" class="code-line">To make lists look nice, you can wrap items with hanging indents:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">*   </span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+<span class="hljs-code">    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,</span>
+<span class="hljs-code">    viverra nec, fringilla in, laoreet vitae, risus.</span>
+<span class="hljs-bullet">*   </span>Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+<span class="hljs-code">    Suspendisse id sem consectetuer libero luctus adipiscing.</span>
+</div></code></pre>
+<p data-line="287" class="code-line">But if you want to be lazy, you don’t have to</p>
+<p data-line="289" class="code-line">If one list item is separated by a blank line, Showdown will wrap all the list items in <code>&lt;p&gt;</code> tags in the HTML output.
+So this input:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">* </span>Bird
+
+<span class="hljs-bullet">* </span>Magic
+<span class="hljs-bullet">* </span>Johnson
+</div></code></pre>
+<p data-line="299" class="code-line">Results in:</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Bird<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Magic<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Johnson<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+</div></code></pre>
+<p data-line="309" class="code-line">This differs from other markdown implementations such as GFM (github) or commonmark.</p>
+<h3 data-line="311" class="code-line" id="nested-blocks">Nested blocks</h3>
+<p data-line="313" class="code-line">List items may consist of multiple paragraphs. Each subsequent paragraph in a list item must be indented by either 4 spaces or one tab:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">1.  </span>This is a list item with two paragraphs. Lorem ipsum dolor
+<span class="hljs-code">    sit amet, consectetuer adipiscing elit. Aliquam hendrerit</span>
+<span class="hljs-code">    mi posuere lectus.</span>
+
+<span class="hljs-code">    Vestibulum enim wisi, viverra nec, fringilla in, laoreet</span>
+<span class="hljs-code">    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum</span>
+<span class="hljs-code">    sit amet velit.</span>
+
+<span class="hljs-bullet">2.  </span>Suspendisse id sem consectetuer libero luctus adipiscing.
+</div></code></pre>
+<p data-line="327" class="code-line">This is valid for other block elements such as blockquotes:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">*   </span>A list item with a blockquote:
+
+<span class="hljs-code">    &gt; This is a blockquote</span>
+<span class="hljs-code">    &gt; inside a list item.</span>
+</div></code></pre>
+<p data-line="336" class="code-line">or event other lists.</p>
+<h3 data-line="338" class="code-line" id="nested-lists">Nested lists</h3>
+<p data-line="340" class="code-line">You can create nested lists by indenting list items by <strong>four</strong> spaces.</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">1.  </span>Item 1
+<span class="hljs-code">    1. A corollary to the above item.</span>
+<span class="hljs-code">    2. Yet another point to consider.</span>
+<span class="hljs-bullet">2.  </span>Item 2
+<span class="hljs-code">    * A corollary that does not need to be ordered.</span>
+<span class="hljs-code">    * This is indented four spaces</span>
+<span class="hljs-code">    * You might want to consider making a new list.</span>
+<span class="hljs-bullet">3.  </span>Item 3
+</div></code></pre>
+<p data-line="353" class="code-line">This behavior is consistent with the original spec but differs from other implementations suck as GFM or commonmark. Prior to version 1.5, you just needed to indent two spaces for it to be considered a sublist.
+You can disable the <strong>four spaces requirement</strong> with option <strong><code>disableForced4SpacesIndentedSublists</code></strong></p>
+<p data-line="356" class="code-line">To nest a third (or more) sublist level, you need to indent 4 extra spaces (or 1 extra tab) for each level.</p>
+<pre class="hljs"><code><div>1.  level 1
+    1.  Level 2
+        *   Level 3
+    2.  level 2
+        1.  Level 3
+1.  Level 1
+</div></code></pre>
+<h3 data-line="367" class="code-line" id="nested-code-blocks">Nested code blocks</h3>
+<p data-line="369" class="code-line">You can nest fenced codeblocks the same way you nest other block elements, by indenting by fours spaces or a tab:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">1.  </span>Some code:
+
+<span class="hljs-code">    ```js</span>
+<span class="hljs-code">    var foo = 'bar';</span>
+<span class="hljs-code">    console.log(foo);</span>
+<span class="hljs-code">    ```</span>
+</div></code></pre>
+<p data-line="380" class="code-line">To put a <em>indented style</em> code block within a list item, the code block needs to be indented twice — 8 spaces or two tabs:</p>
+<pre class="hljs"><code><div><span class="hljs-bullet">1.  </span>Some code:
+
+<span class="hljs-code">    var foo = 'bar';</span>
+<span class="hljs-code">    console.log(foo);</span>
+</div></code></pre>
+<h2 data-line="389" class="code-line" id="links">Links</h2>
+<h3 data-line="391" class="code-line" id="simple">Simple</h3>
+<p data-line="393" class="code-line">If you wrap a valid URL or email in <code>&lt;&gt;</code> it will be turned into a link whose text is the link itself.</p>
+<pre class="hljs"><code><div>link to <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">http:</span>//<span class="hljs-attr">www.google.com</span>/&gt;</span></span>
+
+this is my email <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">somedude@mail.com</span>&gt;</span></span>
+</div></code></pre>
+<p data-line="401" class="code-line">In the case of email addreses, Showdown will also perform a bit of randomized decimal and hex entity-encoding to help obscure your address from address-harvesting spambots.
+You can disable this obfuscation setting <strong><code>encodeEmails</code></strong> option to <code>false</code>.</p>
+<p data-line="404" class="code-line">With the option <strong><code>simplifiedAutoLink</code></strong> enabled, Showdown will automagically turn every valid URL it finds in the text body to links for you, without the need to wrap them in <code>&lt;&gt;</code>.</p>
+<pre class="hljs"><code><div>link to http://www.google.com/
+
+this is my email somedude@mail.com
+</div></code></pre>
+<h3 data-line="412" class="code-line" id="inline">Inline</h3>
+<p data-line="414" class="code-line">You can create an inline link by wrapping link text in brackets ( <code>[ ]</code> ), and then wrapping the link in parentheses ( <code>( )</code> ).</p>
+<p data-line="416" class="code-line">For example, to create a hyperlink to github.com/showdownjs/showdown, with a link text that says, Get Showdown!, you'd write this in Markdown: <code>[Get Showdown!](https://github.com/showdownjs/showdown)</code>.</p>
+<h3 data-line="418" class="code-line" id="reference-style">Reference Style</h3>
+<p data-line="420" class="code-line">You can also use the reference style, like this:</p>
+<pre class="hljs"><code><div>this is a [<span class="hljs-string">link to google</span>][<span class="hljs-symbol">1</span>]
+
+[<span class="hljs-symbol">1</span>]: <span class="hljs-link">www.google.com</span>
+</div></code></pre>
+<p data-line="428" class="code-line">Showdown also supports implicit link references:</p>
+<pre class="hljs"><code><div>this is a link to [<span class="hljs-string">google</span>][<span class="hljs-symbol"></span>]
+
+[<span class="hljs-symbol">google</span>]: <span class="hljs-link">www.google.com</span>
+</div></code></pre>
+<h2 data-line="436" class="code-line" id="images">Images</h2>
+<p data-line="438" class="code-line">Markdown uses an image syntax that is intended to resemble the syntax for links, also allowing for two styles: inline and reference.</p>
+<h3 data-line="440" class="code-line" id="inline">Inline</h3>
+<p data-line="442" class="code-line">Inline image syntax looks like this:</p>
+<pre class="hljs"><code><div>![Alt text](url/to/image)
+
+![Alt text](url/to/image &quot;Optional title&quot;)
+</div></code></pre>
+<p data-line="450" class="code-line">That is:</p>
+<ul>
+<li data-line="452" class="code-line">An exclamation mark: !;</li>
+<li data-line="453" class="code-line">followed by a set of square brackets, containing the alt attribute text for the image;</li>
+<li data-line="454" class="code-line">followed by a set of parentheses, containing the URL or path to the image, and an optional title attribute enclosed in double or single quotes.</li>
+</ul>
+<h3 data-line="457" class="code-line" id="reference-style">Reference Style</h3>
+<p data-line="459" class="code-line">Reference-style image syntax looks like this:</p>
+<pre class="hljs"><code><div>![<span class="hljs-string">Alt text</span>][<span class="hljs-symbol">id</span>]
+</div></code></pre>
+<p data-line="465" class="code-line">Where “id” is the name of a defined image reference. Image references are defined using syntax identical to link references:</p>
+<pre class="hljs"><code><div>[<span class="hljs-symbol">id</span>]: <span class="hljs-link">url/to/image  "Optional title attribute"</span>
+</div></code></pre>
+<p data-line="471" class="code-line">Implicit references are also supported in images, similar to what happens with links:</p>
+<pre class="hljs"><code><div>![<span class="hljs-string">showdown logo</span>][<span class="hljs-symbol"></span>]
+
+[<span class="hljs-symbol">showdown logo</span>]: <span class="hljs-link">http://showdownjs.github.io/demo/img/editor.logo.white.png</span>
+</div></code></pre>
+<h3 data-line="479" class="code-line" id="image-dimensions">Image dimensions</h3>
+<p data-line="481" class="code-line">When the option <strong><code>parseImgDimension</code></strong> is activated, you can also define the image dimensions, like this:</p>
+<pre class="hljs"><code><div>![<span class="hljs-string">Alt text</span>](<span class="hljs-link">url/to/image =250x250 "Optional title"</span>)
+</div></code></pre>
+<p data-line="487" class="code-line">or in reference style:</p>
+<pre class="hljs"><code><div>![<span class="hljs-string">Alt text</span>][<span class="hljs-symbol">id</span>]
+
+[<span class="hljs-symbol">id</span>]: <span class="hljs-link">url/to/image =250x250</span>
+</div></code></pre>
+<h2 data-line="495" class="code-line" id="tables">Tables</h2>
+<p data-line="497" class="code-line">Tables aren't part of the core Markdown spec, but they are part of GFM and Showdown supports them by turning on the option <code>tables</code>.</p>
+<p data-line="499" class="code-line">Colons can be used to align columns.</p>
+<p data-line="501" class="code-line">In the new version, the outer pipes (<code>|</code>) are optional, matching GFM spec.</p>
+<p data-line="503" class="code-line">You also don't need to make the raw Markdown line up prettily.</p>
+<p data-line="505" class="code-line">You can also use other markdown syntax inside them.</p>
+<pre class="hljs"><code><div>| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      | *centered*    |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+</div></code></pre>
+<h2 data-line="515" class="code-line" id="escaping-markdown-entities">Escaping markdown entities</h2>
+<p data-line="517" class="code-line">Showdown allows you to use backslash (<code>\</code>) escapes to generate literal characters which would otherwise have special meaning in markdown’s syntax. For example, if you wanted to surround a word with literal underscores (instead of an HTML <code>&lt;em&gt;</code> tag), you can use backslashes before the unserscores, like this:</p>
+<pre class="hljs"><code><div>\<span class="hljs-emphasis">_literal underscores\_</span>
+</div></code></pre>
+<p data-line="523" class="code-line">Showdown provides backslash escapes for the following characters:</p>
+<pre class="hljs"><code><div>\   backslash
+`   backtick
+*   asterisk
+_   underscore
+{}  curly braces
+[]  square brackets
+()  parentheses
+#   hash mark
++   plus sign
+-   minus sign (hyphen)
+.   dot
+!   exclamation mark
+</div></code></pre>
+<h2 data-line="540" class="code-line" id="mentions">Mentions</h2>
+<p data-line="542" class="code-line">Showdown supports github mentions by enabling the option <strong><code>ghMentions</code></strong>. This will turn every <code>@username</code> into a link to their github profile.</p>
+<pre class="hljs"><code><div>hey @tivie, check this out
+</div></code></pre>
+<p data-line="548" class="code-line">Since version 1.6.2 you can customize the generated link in mentions with the option <strong><code>ghMentionsLink</code></strong>.
+For instance, setting this option to <code>http://mysite.com/{u}/profile</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>hey <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"http://mysite.com/tivie/profile"</span>&gt;</span>@tivie<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>, check this out<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</div></code></pre>
+<h2 data-line="555" class="code-line" id="handling-html-in-markdown-documents">Handling HTML in markdown documents</h2>
+<p data-line="557" class="code-line">Showdown, in most cases, leaves HTML tags alone, leaving them untouched in the output document.</p>
+<pre class="hljs"><code><div>some markdown <span class="hljs-strong">**here**</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span>this is <span class="hljs-emphasis">*not*</span> <span class="hljs-strong">**parsed**</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>some markdown <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>here<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>this is *not* **parsed**<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<p data-line="569" class="code-line">However, there are exceptions to this. With <code>&lt;code&gt;</code> and <code>&lt;pre&gt;&lt;code&gt;</code> tags, their contents are always escaped.</p>
+<pre class="hljs"><code><div>some markdown <span class="hljs-strong">**here**</span> with <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span></span>foo &amp; bar <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">baz</span>&gt;</span></span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">baz</span>&gt;</span></span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span></span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>some markdown <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>here<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span> with <span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>foo &amp;amp; bar &amp;lt;baz&amp;gt;&amp;lt;/baz&amp;gt;<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</div></code></pre>
+<p data-line="579" class="code-line">If you wish to enable markdown parsing inside a specific HTML tag, you can enable it by using the html attribute <strong><code>markdown</code></strong> or  <strong><code>markdown=&quot;1&quot;</code></strong>  or <strong><code>data-markdown=&quot;1&quot;</code></strong>.</p>
+<pre class="hljs"><code><div>some markdown <span class="hljs-strong">**here**</span>
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">markdown</span>=<span class="hljs-string">"1"</span>&gt;</span></span>this is <span class="hljs-emphasis">*not*</span> <span class="hljs-strong">**parsed**</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>some markdown <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>here<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">markdown</span>=<span class="hljs-string">"1"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>this is <span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>not<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>parsed<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</div></code></pre>
+<h2 data-line="591" class="code-line" id="known-differences-and-gotchas">Known differences and Gotchas</h2>
+<p data-line="593" class="code-line">In most cases, Showdown's output is identical to that of Perl Markdown v1.0.2b7.  What follows is a list of all known deviations.  Please file an issue if you find more.</p>
+<ul>
+<li data-line="595" class="code-line">
+<p><strong>Since version 1.4.0, showdown supports the markdown=&quot;1&quot; attribute</strong>, but for older versions, this attribute is ignored. This means:</p>
+<pre><code>  &lt;div markdown=&quot;1&quot;&gt;
+       Markdown does *not* work in here.
+  &lt;/div&gt;
+</code></pre>
+</li>
+<li data-line="602" class="code-line">
+<p>You can only nest square brackets in link titles to a
+depth of two levels:</p>
+<pre><code>  [[fine]](http://www.github.com/)
+  [[[broken]]](http://www.github.com/)
+</code></pre>
+<p>If you need more, you can escape them with backslashes.</p>
+</li>
+<li data-line="611" class="code-line">
+<p>A list is <strong>single paragraph</strong> if it has only <strong>1 line-break separating items</strong> and it becomes <strong>multi paragraph if ANY of its items is separated by 2 line-breaks</strong>:</p>
+<pre class="hljs"><code><div> - foo
+
+ - bar
+ - baz
+</div></code></pre>
+<p>becomes</p>
+<pre class="hljs"><code><div><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>foo<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>bar<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>baz<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+</div></code></pre>
+</li>
+</ul>
+<p data-line="629" class="code-line">This new ruleset is based on the comments of Markdown's author John Gruber in the <a href="https://pairlist6.pair.net/mailman/listinfo/markdown-discuss">Markdown discussion list</a>.</p>

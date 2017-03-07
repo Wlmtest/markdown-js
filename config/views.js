@@ -4,5 +4,5 @@ module.exports = (Views) => {
             html: 'nunjucks'
         }
     };
-    return Views(`${__dir}/source`, opt);
+    return Views(`${__dir}/source/static/html`, opt);
 };

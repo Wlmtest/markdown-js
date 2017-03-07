@@ -2,8 +2,10 @@ const Boom = require('boom');
 const Router = require('koa-router');
 const Views = require('koa-views');
 const Body = require('koa-bodyparser');
-
+const st = require('koa-static');
+//加载表态文件
 module.exports = (app) => {
+    app.use(st(__dir + '/source/static'));
     app.use(Body());
     app.use(async({ response }, next) => {
         response.set('Content-Type', 'application/json');

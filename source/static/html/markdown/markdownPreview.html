@@ -1,0 +1,18 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/vscode-markdown.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/css/tomorrow.css" />
+    <script type="text/javascript" src="http://localhost:3000/js/jquery.min.js"></script>
+</head>
+
+<body class="vscode-light showEditorSelection scrollBeyondLastLine">
+</body>
+<footer></footer>
+<input id="code_hide" type="hidden" value="{{markdown}}">
+<script>
+    let template = $('input#code_hide').val();
+    $('body').append($(template));
+</script>
+
+</html>

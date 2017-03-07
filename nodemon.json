@@ -1,0 +1,25 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules",
+        "**/*/.DS_Store"
+    ],
+    "verbose": true,
+    "execMap": {
+        "js": "node --harmony"
+    },
+    "watch": [
+        "config/",
+        "controller/",
+        "router/",
+        "source/",
+        "source/static/html/web/**/*"
+    ],
+    "env": {
+        "NODE_ENV": "development",
+        "PORT": "3000"
+    },
+    "ext": "js json html md",
+    "legacy-watch": false
+}

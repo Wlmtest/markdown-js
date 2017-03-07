@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --harmony server.js",
+    "start": "nodemon server.js",
     "pm2": "pm2 start ecosystem.config.js ",
     "eslint": "./node_modules/.bin/eslint . ;exit 0"
   },
@@ -14,15 +14,23 @@
   "dependencies": {
     "boom": "^4.2.0",
     "d3": "^4.5.0",
+    "highlight.js": "^9.9.0",
+    "jquery": "^3.1.1",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.2.0",
     "koa-router": "^7.0.1",
+    "koa-static": "^3.0.0",
     "koa-views": "^5.2.0",
+    "markdown-it": "^8.3.0",
+    "markdown-it-named-headers": "0.0.4",
     "mongodb": "^2.2.19",
     "nodemon": "^1.11.0",
     "nunjucks": "^3.0.0",
+    "promise": "^7.1.1",
     "showdown": "^1.6.4",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
   },
   "devDependencies": {
     "eslint": "^3.13.0",
